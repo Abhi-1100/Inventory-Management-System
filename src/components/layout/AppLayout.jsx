@@ -43,11 +43,12 @@ export default function AppLayout({ children }) {
   }
 
   return (
-    <div className="flex h-screen bg-bg overflow-hidden">
+    <div className="flex min-h-screen" style={{ backgroundColor: '#fdf8f4' }}>
       <Sidebar />
-      <div className="flex flex-col flex-1 overflow-hidden">
+      {/* Offset for fixed sidebar */}
+      <div className="flex flex-col flex-1 ml-64 min-h-screen">
         <Navbar />
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-8">
           {children}
         </main>
       </div>

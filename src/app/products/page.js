@@ -2,7 +2,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
-import { Plus, AlertTriangle, PackageX } from 'lucide-react';
+import { Plus, AlertTriangle, PackageX, Download, Printer, MoreVertical, Package } from 'lucide-react';
 import { createColumnHelper } from '@tanstack/react-table';
 import AppLayout from '@/components/layout/AppLayout';
 import PageHeader from '@/components/shared/PageHeader';
@@ -12,6 +12,40 @@ import api from '@/lib/axios';
 import Link from 'next/link';
 
 const columnHelper = createColumnHelper();
+
+// Status badge component
+function StockStatusBadge({ row }) {
+  if (row.isOutOfStock) {
+    return (
+      <span
+        className="inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full border"
+        style={{ backgroundColor: '#fee2e2', color: '#dc2626', borderColor: '#fecaca' }}
+      >
+        <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: '#dc2626' }} />
+        Out of Stock
+      </span>
+    );
+  }
+  if (row.isLowStock) {
+    return (
+      <span
+        className="inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full border"
+        style={{ backgroundColor: '#fee2e2', color: '#dc2626', borderColor: '#fecaca' }}
+      >
+        <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: '#dc2626' }} />
+        Low Stock
+      </span>
+    );
+  }
+  return (
+    <span
+      className="inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full border"
+      style={{ backgroundColor: '#d1fae5', color: '#059669', borderColor: '#a7f3d0' }}
+    >
+      In Stock
+    </span>
+  );
+}
 
 export default function ProductsPage() {
   const router = useRouter();
@@ -44,54 +78,169 @@ export default function ProductsPage() {
   }, []);
 
   const columns = [
-    columnHelper.accessor('name', { header: 'Product Name', cell: (info) => <span className="font-medium text-text-primary">{info.getValue()}</span> }),
-    columnHelper.accessor('sku', { header: 'SKU', cell: (info) => <span className="font-mono text-xs text-text-secondary">{info.getValue()}</span> }),
-    columnHelper.accessor('category.name', { header: 'Category', cell: (info) => info.getValue() || '—' }),
-    columnHelper.accessor('unitOfMeasure', { header: 'UoM' }),
-    columnHelper.accessor('totalStock', { header: 'Stock', cell: (info) => <span className="font-semibold">{info.getValue() ?? 0}</span> }),
+    // Product Name with icon placeholder
+    columnHelper.accessor('name', {
+      header: 'Product Name',
+      cell: (info) => (
+        <div className="flex items-center gap-3">
+          <div
+            className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+            style={{ backgroundColor: '#f1f5f9' }}
+          >
+            <Package size={18} style={{ color: '#94a3b8' }} />
+          </div>
+          <span className="font-semibold text-sm" style={{ color: '#0f172a' }}>
+            {info.getValue()}
+          </span>
+        </div>
+      ),
+    }),
+    // SKU
+    columnHelper.accessor('sku', {
+      header: 'SKU',
+      cell: (info) => (
+        <span className="font-mono text-xs" style={{ color: '#94a3b8' }}>
+          {info.getValue() || '—'}
+        </span>
+      ),
+    }),
+    // Category
+    columnHelper.accessor('category.name', {
+      header: 'Category',
+      cell: (info) => info.getValue() ? (
+        <span
+          className="text-xs px-2 py-1 rounded-full font-medium"
+          style={{ backgroundColor: '#f1f5f9', color: '#475569' }}
+        >
+          {info.getValue()}
+        </span>
+      ) : '—',
+    }),
+    // Unit of Measure
+    columnHelper.accessor('unitOfMeasure', {
+      header: 'UoM',
+      cell: (info) => <span className="text-sm">{info.getValue() || '—'}</span>,
+    }),
+    // Qty / Stock
+    columnHelper.accessor('totalStock', {
+      header: 'Qty',
+      cell: (info) => (
+        <span className="text-sm font-bold" style={{ color: '#0f172a' }}>
+          {info.getValue() ?? 0}
+        </span>
+      ),
+    }),
+    // Location
+    columnHelper.accessor('location', {
+      header: 'Location',
+      cell: (info) => (
+        <span className="text-sm" style={{ color: '#64748b' }}>
+          {info.getValue() || '—'}
+        </span>
+      ),
+    }),
+    // Status badge
     columnHelper.accessor('isLowStock', {
       header: 'Status',
-      cell: (info) => {
-        const row = info.row.original;
-        if (row.isOutOfStock) return <span className="flex items-center gap-1 text-danger text-xs"><PackageX size={13} /> Out of stock</span>;
-        if (row.isLowStock) return <span className="flex items-center gap-1 text-warning text-xs"><AlertTriangle size={13} /> Low stock</span>;
-        return <span className="text-success text-xs">In stock</span>;
-      },
+      cell: (info) => <StockStatusBadge row={info.row.original} />,
+    }),
+    // Actions
+    columnHelper.display({
+      id: 'actions',
+      header: () => <span className="block text-right">Actions</span>,
+      cell: (info) => (
+        <div className="flex justify-end">
+          <button
+            onClick={(e) => { e.stopPropagation(); }}
+            className="p-1 rounded transition-colors hover:opacity-70"
+            style={{ color: '#94a3b8' }}
+          >
+            <MoreVertical size={18} />
+          </button>
+        </div>
+      ),
     }),
   ];
 
   return (
     <AppLayout>
       <Toaster position="top-right" />
+
+      {/* Page Header */}
       <PageHeader
         title="Products"
-        subtitle={`${total} product${total !== 1 ? 's' : ''} total`}
+        subtitle="Manage your catalog, monitor stock levels and locations."
         action={
-          <Link href="/products/new" className="flex items-center gap-2 bg-accent hover:bg-accent-hover text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
-            <Plus size={16} /> New Product
+          <Link
+            href="/products/new"
+            className="flex items-center gap-2 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all shadow-lg"
+            style={{ backgroundColor: '#f07c28', boxShadow: '0 4px 14px rgba(240,124,40,0.25)' }}
+            onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#e06d14'; }}
+            onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#f07c28'; }}
+          >
+            <Plus size={18} />
+            Add Product
           </Link>
         }
       />
 
-      {/* Filters */}
-      <div className="flex flex-wrap items-center gap-3 mb-4">
+      {/* Filters Bar */}
+      <div
+        className="bg-white rounded-xl p-4 flex flex-wrap items-center gap-4 mb-6"
+        style={{ border: '1px solid #e2e8f0' }}
+      >
+        <span className="text-xs font-bold uppercase tracking-wider ml-1" style={{ color: '#94a3b8' }}>
+          Filters:
+        </span>
+
+        {/* Search */}
         <SearchInput
           value={filters.search}
           onChange={(v) => setFilters((f) => ({ ...f, search: v, page: 1 }))}
-          placeholder="Search products..."
+          placeholder="Search SKU, name, or category..."
         />
+
+        {/* Category dropdown */}
         <select
           value={filters.categoryId}
           onChange={(e) => setFilters((f) => ({ ...f, categoryId: e.target.value, page: 1 }))}
-          className="bg-bg-surface border border-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-accent/50 transition-colors"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium focus:outline-none transition-colors cursor-pointer"
+          style={{
+            backgroundColor: '#f8fafc',
+            border: '1px solid #e2e8f0',
+            color: '#334155',
+          }}
         >
-          <option value="">All Categories</option>
+          <option value="">Category: All</option>
           {categories.map((c) => (
             <option key={c.id} value={c.id}>{c.name}</option>
           ))}
         </select>
+
+        {/* Export + Print */}
+        <div className="ml-auto flex items-center gap-2">
+          <button
+            className="p-2 transition-colors rounded"
+            style={{ color: '#94a3b8' }}
+            onMouseOver={(e) => { e.currentTarget.style.color = '#f07c28'; }}
+            onMouseOut={(e) => { e.currentTarget.style.color = '#94a3b8'; }}
+            title="Export"
+          >
+            <Download size={18} />
+          </button>
+          <button
+            className="p-2 transition-colors rounded"
+            style={{ color: '#94a3b8' }}
+            onMouseOver={(e) => { e.currentTarget.style.color = '#f07c28'; }}
+            onMouseOut={(e) => { e.currentTarget.style.color = '#94a3b8'; }}
+            title="Print"
+          >
+            <Printer size={18} />
+          </button>
+        </div>
       </div>
 
+      {/* Table */}
       <DataTable
         data={data}
         columns={columns}
