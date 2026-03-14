@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import './landing.css';
 
 export default function LandingPage() {
   return (
-    <div className="font-sans text-[#393939] bg-white antialiased">
+    <div className="landing-page font-sans text-[#393939] bg-white antialiased">
       {/* ── Header ── */}
       <header className="fixed top-0 w-full z-50 border-b border-[#A4B6C2]/20"
         style={{ background: 'rgba(255,255,255,0.70)', backdropFilter: 'blur(10px)' }}>
