@@ -6,41 +6,25 @@ import {
   Package,
   PackageOpen,
   Truck,
-  ArrowLeftRight,
-  ClipboardList,
-  History,
-  Settings,
-  UserCircle,
-  LogOut,
-  Boxes,
   BarChart2,
-  Warehouse,
+  Settings,
+  Boxes,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
-import { useRouter } from 'next/navigation';
 
 const navItems = [
   { label: 'Dashboard',    href: '/dashboard',               icon: LayoutDashboard },
-  { label: 'Products',     href: '/products',                icon: Package },
-  { label: 'Operations',   href: '/operations/receipts',     icon: PackageOpen },
-  { label: 'Move History', href: '/move-history',            icon: History },
-  { label: 'Reports',      href: '/settings/warehouses',     icon: BarChart2 },
-];
-
-const bottomItems = [
-  { label: 'Settings',    href: '/settings/warehouses', icon: Settings },
+  { label: 'Inventory',    href: '/products',                icon: Package },
+  { label: 'Orders',       href: '/operations/receipts',     icon: PackageOpen },
+  { label: 'Suppliers',    href: '/operations/transfers',    icon: Truck },
+  { label: 'Reports',      href: '/move-history',            icon: BarChart2 },
+  { label: 'Settings',     href: '/settings/warehouses',     icon: Settings },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const { clearAuth } = useAuthStore();
-  const router = useRouter();
-
-  const handleLogout = () => {
-    clearAuth();
-    router.push('/login');
-  };
-
+  const { user } = useAuthStore();
+  
   const isActive = (href) => {
     if (href === '/dashboard') return pathname === '/dashboard';
     return pathname.startsWith(href);
@@ -51,63 +35,36 @@ export default function Sidebar() {
       style={{ backgroundColor: '#ffffff', borderRight: '1px solid #e2e8f0' }}>
 
       {/* Logo */}
-      <div className="p-6 flex items-center gap-3" style={{ borderBottom: '1px solid #f1f5f9' }}>
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
-          style={{ backgroundColor: '#f07c28', boxShadow: '0 4px 12px rgba(240,124,40,0.25)' }}>
-          <Boxes size={20} className="text-white" />
+      <div className="p-6 flex items-center gap-3">
+        <div className="w-8 h-8 rounded shrink-0 flex items-center justify-center shadow-[0_2px_4px_rgba(242,125,33,0.3)]"
+          style={{ backgroundColor: '#F27D21' }}>
+          <Boxes size={18} className="text-white" />
         </div>
-        <div>
-          <h1 className="font-bold text-lg leading-tight" style={{ color: '#0f172a' }}>CoreInventory</h1>
-          <p className="text-xs" style={{ color: '#94a3b8' }}>Inventory Management</p>
-        </div>
+        <h1 className="font-extrabold text-lg tracking-tight" style={{ color: '#1a1a1a' }}>STOCKFLOW</h1>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
+      <nav className="flex-1 overflow-y-auto px-4 py-2 space-y-1">
         {navItems.map(({ label, href, icon: Icon }) => {
           const active = isActive(href);
           return (
             <Link
               key={href}
               href={href}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150"
+              className="flex items-center gap-4 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150"
               style={active
-                ? { backgroundColor: 'rgba(240,124,40,0.1)', color: '#f07c28' }
-                : { color: '#475569' }
+                ? { backgroundColor: '#F0F0F0', color: '#1a1a1a' }
+                : { color: '#7a8fa6' }
               }
-              onMouseOver={(e) => { if (!active) { e.currentTarget.style.backgroundColor = '#f8fafc'; e.currentTarget.style.color = '#0f172a'; } }}
-              onMouseOut={(e) => { if (!active) { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#475569'; } }}
+              onMouseOver={(e) => { if (!active) { e.currentTarget.style.backgroundColor = '#F8F9FA'; e.currentTarget.style.color = '#393939'; } }}
+              onMouseOut={(e) => { if (!active) { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#7a8fa6'; } }}
             >
-              <Icon size={18} style={{ color: active ? '#f07c28' : 'inherit' }} />
+              <Icon size={18} style={{ color: active ? '#1a1a1a' : '#A4B6C2' }} />
               {label}
             </Link>
           );
         })}
       </nav>
-
-      {/* Bottom: Settings + Logout */}
-      <div className="p-4 space-y-1" style={{ borderTop: '1px solid #e2e8f0' }}>
-        <Link
-          href="/settings/warehouses"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150"
-          style={{ color: '#475569' }}
-          onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; e.currentTarget.style.color = '#0f172a'; }}
-          onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#475569'; }}
-        >
-          <Settings size={18} />
-          Settings
-        </Link>
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150"
-          style={{ color: '#475569' }}
-          onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#fef2f2'; e.currentTarget.style.color = '#ef4444'; }}
-          onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#475569'; }}
-        >
-          <LogOut size={18} />
-          Logout
-        </button>
-      </div>
     </aside>
   );
 }
