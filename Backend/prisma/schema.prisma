@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String     @id @default(uuid())
+  name         String
+  email        String     @unique
+  passwordHash String     @map("password_hash")
+  role         Role       @default(STAFF)
+  createdAt    DateTime   @default(now()) @map("created_at")
+  otpTokens    OtpToken[]
+  operations   Operation[]
+  @@map("users")
+}
+
+model OtpToken {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  token     String
+  expiresAt DateTime @map("expires_at")
+  used      Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+  @@map("otp_tokens")
+}
+
+enum Role {
+  MANAGER
+  STAFF
+}
+
+model Warehouse {
+  id        String     @id @default(uuid())
+  name      String
+  shortCode String     @unique @map("short_code")
+  address   String?
+  createdAt DateTime   @default(now()) @map("created_at")
+  locations Location[]
+  @@map("warehouses")
+}
+
+model Location {
+  id            String        @id @default(uuid())
+  warehouseId   String        @map("warehouse_id")
+  name          String
+  shortCode     String        @map("short_code")
+  warehouseType WarehouseType @default(INTERNAL) @map("warehouse_type")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  warehouse     Warehouse     @relation(fields: [warehouseId], references: [id])
+  stockEntries  Stock[]
+  ledgerEntries StockLedger[]
+  sourceOps     Operation[]   @relation("SourceLocation")
+  destOps       Operation[]   @relation("DestLocation")
+  reorderRules  ReorderRule[]
+  @@map("locations")
+}
+
+enum WarehouseType {
+  INTERNAL
+  VIEW
+  PRODUCTION
+  VENDOR
+  CUSTOMER
+}
+
+model ProductCategory {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  createdAt DateTime  @default(now()) @map("created_at")
+  products  Product[]
+  @@map("product_categories")
+}
+
+model Product {
+  id             String          @id @default(uuid())
+  name           String
+  sku            String          @unique
+  categoryId     String          @map("category_id")
+  unitOfMeasure  String          @map("unit_of_measure")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  category       ProductCategory @relation(fields: [categoryId], references: [id])
+  stockEntries   Stock[]
+  ledgerEntries  StockLedger[]
+  operationLines OperationLine[]
+  reorderRules   ReorderRule[]
+  @@map("products")
+}
+
+model Stock {
+  id             String   @id @default(uuid())
+  productId      String   @map("product_id")
+  locationId     String   @map("location_id")
+  quantityOnHand Decimal  @default(0) @map("quantity_on_hand")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  product        Product  @relation(fields: [productId], references: [id])
+  location       Location @relation(fields: [locationId], references: [id])
+  @@unique([productId, locationId])
+  @@index([productId])
+  @@index([locationId])
+  @@map("stock")
+}
+
+model StockLedger {
+  id             String        @id @default(uuid())
+  productId      String        @map("product_id")
+  locationId     String        @map("location_id")
+  quantityChange Decimal       @map("quantity_change")
+  referenceType  OperationType @map("reference_type")
+  referenceId    String        @map("reference_id")
+  note           String?
+  createdAt      DateTime      @default(now()) @map("created_at")
+  product        Product       @relation(fields: [productId], references: [id])
+  location       Location      @relation(fields: [locationId], references: [id])
+  @@index([productId])
+  @@index([locationId])
+  @@index([referenceId])
+  @@index([referenceType])
+  @@index([createdAt])
+  @@map("stock_ledger")
+}
+
+model Operation {
+  id                 String          @id @default(uuid())
+  type               OperationType
+  referenceNo        String          @unique @map("reference_no")
+  status             OperationStatus @default(DRAFT)
+  supplierOrCustomer String?         @map("supplier_or_customer")
+  sourceLocationId   String?         @map("source_location_id")
+  destLocationId     String?         @map("dest_location_id")
+  scheduledDate      DateTime?       @map("scheduled_date")
+  createdById        String          @map("created_by")
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
+  createdBy          User            @relation(fields: [createdById], references: [id])
+  sourceLocation     Location?       @relation("SourceLocation", fields: [sourceLocationId], references: [id])
+  destLocation       Location?       @relation("DestLocation", fields: [destLocationId], references: [id])
+  lines              OperationLine[]
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+  @@map("operations")
+}
+
+model OperationLine {
+  id          String    @id @default(uuid())
+  operationId String    @map("operation_id")
+  productId   String    @map("product_id")
+  demandQty   Decimal   @default(0) @map("demand_qty")
+  doneQty     Decimal   @default(0) @map("done_qty")
+  note        String?
+  operation   Operation @relation(fields: [operationId], references: [id])
+  product     Product   @relation(fields: [productId], references: [id])
+  @@map("operation_lines")
+}
+
+model ReorderRule {
+  id         String   @id @default(uuid())
+  productId  String   @map("product_id")
+  locationId String   @map("location_id")
+  minQty     Decimal  @map("min_qty")
+  maxQty     Decimal  @map("max_qty")
+  createdAt  DateTime @default(now()) @map("created_at")
+  product    Product  @relation(fields: [productId], references: [id])
+  location   Location @relation(fields: [locationId], references: [id])
+  @@unique([productId, locationId])
+  @@map("reorder_rules")
+}
+
+enum OperationType {
+  RECEIPT
+  DELIVERY
+  TRANSFER
+  ADJUSTMENT
+}
+
+enum OperationStatus {
+  DRAFT
+  WAITING
+  READY
+  DONE
+  CANCELLED
+}

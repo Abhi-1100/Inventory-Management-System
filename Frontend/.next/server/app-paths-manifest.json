@@ -1,0 +1,12 @@
+{
+  "/operations/deliveries/page": "app/operations/deliveries/page.js",
+  "/operations/transfers/page": "app/operations/transfers/page.js",
+  "/operations/adjustments/page": "app/operations/adjustments/page.js",
+  "/move-history/page": "app/move-history/page.js",
+  "/settings/warehouses/page": "app/settings/warehouses/page.js",
+  "/profile/page": "app/profile/page.js",
+  "/operations/receipts/page": "app/operations/receipts/page.js",
+  "/products/page": "app/products/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/login/page": "app/login/page.js"
+}
