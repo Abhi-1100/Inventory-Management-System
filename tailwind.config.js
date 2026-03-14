@@ -9,26 +9,26 @@ module.exports = {
     extend: {
       colors: {
         bg: {
-          DEFAULT: '#0d1117',
-          surface: '#161b22',
-          card: '#1c2333',
+          DEFAULT: '#fdf8f4',
+          surface: '#f8fafc',
+          card: '#ffffff',
         },
         border: {
-          DEFAULT: '#30363d',
+          DEFAULT: '#e2e8f0',
         },
         text: {
-          primary: '#e6edf3',
-          secondary: '#8b949e',
-          muted: '#484f58',
+          primary: '#0f172a',
+          secondary: '#475569',
+          muted: '#94a3b8',
         },
         accent: {
-          DEFAULT: '#3b82f6',
-          hover: '#2563eb',
+          DEFAULT: '#f07c28',
+          hover: '#e06d14',
         },
-        success: '#22c55e',
-        warning: '#f59e0b',
+        success: '#059669',
+        warning: '#d97706',
         danger: '#ef4444',
-        info: '#06b6d4',
+        info: '#0ea5e9',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
