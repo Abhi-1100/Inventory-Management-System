@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import './landing.css';
+import Logo from '@/components/shared/Logo';
 
 export default function LandingPage() {
   return (
@@ -12,12 +13,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center text-white shadow-lg">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                  strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-              </svg>
-            </div>
+            <Logo size={40} className="drop-shadow-lg" />
             <span className="text-2xl font-extrabold tracking-tight text-[#393939]">
               Core<span className="text-[#A4B6C2]">Inventory</span>
             </span>
@@ -380,12 +376,7 @@ export default function LandingPage() {
             {/* Brand */}
             <div className="col-span-1">
               <div className="flex items-center gap-2 mb-6">
-                <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center text-white">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                      strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                  </svg>
-                </div>
+                <Logo size={32} />
                 <span className="text-xl font-bold tracking-tight text-[#393939]">CoreInventory</span>
               </div>
               <p className="text-[#A4B6C2] text-sm leading-relaxed">
