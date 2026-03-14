@@ -1,0 +1,14 @@
+import { z } from 'zod';
+
+const lineSchema = z.object({
+  productId: z.string().uuid('Select a product'),
+  demandQty: z.coerce.number().min(0),
+  doneQty: z.coerce.number().min(0),
+});
+
+export const createReceiptSchema = z.object({
+  supplierName: z.string().min(1, 'Supplier name is required'),
+  destLocationId: z.string().uuid('Select a destination location'),
+  scheduledDate: z.string().min(1, 'Scheduled date is required'),
+  lines: z.array(lineSchema).min(1, 'Add at least one product line'),
+});
