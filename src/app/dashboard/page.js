@@ -24,11 +24,18 @@ const RECENT_ACTIVITY = [
   { id: '#TR-89213', product: '4K Monitor 27"',           action: 'Delivery', actionColor: '#3b82f6', date: 'Oct 22, 2023', status: 'Cancelled',  statusBg: '#fee2e2', statusColor: '#dc2626', amount: '$450.00' },
 ];
 
-// ── Quick Action items ──────────────────────────────────────────────────────
-const QUICK_ACTIONS = [
-  { label: 'Create Receipt',  desc: 'Record inbound inventory',       icon: ShoppingCart, iconBg: '#fff7ed', iconColor: '#f07c28', href: '/operations/receipts' },
-  { label: 'Create Delivery', desc: 'Ship out customer orders',       icon: Truck,        iconBg: '#eff6ff', iconColor: '#3b82f6', href: '/operations/deliveries' },
-  { label: 'Create Transfer', desc: 'Move stock between warehouses',  icon: ArrowLeftRight, iconBg: '#faf5ff', iconColor: '#a855f7', href: '/operations/transfers' },
+// ── Inventory Alerts ────────────────────────────────────────────────────────
+const INVENTORY_ALERTS = [
+  {
+    title: 'Low Stock: Wireless Earbuds Pro',
+    desc: 'Warehouse A, 5 items left',
+    badge: 'CRITICAL',
+    icon: AlertTriangle,
+    iconBg: '#fef2f2',
+    iconColor: '#dc2626',
+    badgeBg: '#fee2e2',
+    badgeColor: '#dc2626'
+  },
 ];
 
 export default function DashboardPage() {
@@ -207,32 +214,34 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Quick Actions */}
+          {/* Inventory Alerts */}
           <div className="space-y-4">
-            <h3 className="font-bold" style={{ color: '#334155' }}>Quick Actions</h3>
-            {QUICK_ACTIONS.map((action) => {
-              const Icon = action.icon;
+            <h3 className="text-xl font-bold" style={{ color: '#334155' }}>Inventory Alerts</h3>
+            {INVENTORY_ALERTS.map((alert, idx) => {
+              const Icon = alert.icon;
               return (
-                <Link
-                  key={action.label}
-                  href={action.href}
-                  className="flex items-center gap-4 p-4 bg-white rounded-xl transition-all duration-150 group shadow-sm"
+                <div
+                  key={idx}
+                  className="flex items-start gap-4 p-5 bg-white rounded-xl transition-all duration-150 shadow-sm"
                   style={{ border: '1px solid #e2e8f0' }}
-                  onMouseOver={(e) => { e.currentTarget.style.borderColor = '#f07c28'; }}
-                  onMouseOut={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; }}
                 >
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ backgroundColor: action.iconBg }}
+                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                    style={{ backgroundColor: alert.iconBg }}
                   >
-                    <Icon size={18} style={{ color: action.iconColor }} />
+                    <Icon size={24} style={{ color: alert.iconColor, strokeWidth: 2.5 }} />
                   </div>
-                  <div className="text-left flex-1 min-w-0">
-                    <p className="font-semibold text-sm" style={{ color: '#0f172a' }}>{action.label}</p>
-                    <p className="text-xs" style={{ color: '#94a3b8' }}>{action.desc}</p>
+                  <div className="text-left flex-1 min-w-0 pt-0.5">
+                    <p className="font-bold text-lg leading-snug" style={{ color: '#0f172a' }}>{alert.title}</p>
+                    <p className="text-base mt-2 mb-4" style={{ color: '#64748b' }}>{alert.desc}</p>
+                    <span 
+                      className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wider"
+                      style={{ backgroundColor: alert.badgeBg, color: alert.badgeColor }}
+                    >
+                      {alert.badge}
+                    </span>
                   </div>
-                  <ChevronRight size={16} style={{ color: '#cbd5e1' }} className="group-hover:text-[#f07c28] transition-colors flex-shrink-0" />
-                </Link>
+                </div>
               );
             })}
           </div>
