@@ -4,11 +4,12 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast, { Toaster } from 'react-hot-toast';
-import { Eye, EyeOff, Boxes, Mail, Lock, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, ArrowRight } from 'lucide-react';
 import { loginSchema } from '@/schemas/auth.schema';
 import { useAuthStore } from '@/store/authStore';
 import api from '@/lib/axios';
 import Link from 'next/link';
+import Logo from '@/components/shared/Logo';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -84,9 +85,7 @@ export default function LoginPage() {
           {/* Top: Logo + Brand */}
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-12">
-              <div className="p-2 rounded-lg" style={{ backgroundColor: '#f27d21' }}>
-                <Boxes size={22} className="text-white" />
-              </div>
+              <Logo size={38} className="drop-shadow-sm" />
               <span className="text-lg font-bold tracking-tight text-white">CoreInventory</span>
             </div>
 
@@ -122,9 +121,7 @@ export default function LoginPage() {
 
           {/* Mobile logo */}
           <div className="md:hidden flex items-center gap-2 mb-8">
-            <div className="p-2 rounded-lg" style={{ backgroundColor: '#f27d21' }}>
-              <Boxes size={20} className="text-white" />
-            </div>
+            <Logo size={36} className="drop-shadow-sm" />
             <span className="font-bold text-[#393939]">CoreInventory</span>
           </div>
 

@@ -10,9 +10,9 @@ import {
   ClipboardList,
   History,
   Settings,
-  Boxes,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
+import Logo from '@/components/shared/Logo';
 
 const navItems = [
   { label: 'Dashboard',    href: '/dashboard',               icon: LayoutDashboard },
@@ -40,10 +40,7 @@ export default function Sidebar() {
 
       {/* Logo */}
       <div className="p-6 flex items-center gap-3">
-        <div className="w-8 h-8 rounded shrink-0 flex items-center justify-center shadow-[0_2px_4px_rgba(242,125,33,0.3)]"
-          style={{ backgroundColor: '#F27D21' }}>
-          <Boxes size={18} className="text-white" />
-        </div>
+        <Logo size={32} className="shrink-0 drop-shadow-[0_2px_4px_rgba(242,125,33,0.3)]" />
         <h1 className="font-extrabold text-lg tracking-tight" style={{ color: '#1a1a1a' }}>CoreInventory</h1>
       </div>
 
