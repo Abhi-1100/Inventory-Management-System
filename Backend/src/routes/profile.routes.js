@@ -6,6 +6,8 @@ const ctrl = require('../controllers/profile.controller');
 
 router.use(authenticate);
 
+router.get('/', ctrl.getProfile);
+
 router.put(
   '/',
   [body('name').notEmpty(), body('email').isEmail()],
@@ -19,5 +21,7 @@ router.put(
   validate,
   ctrl.changePassword
 );
+
+router.post('/deactivate', ctrl.deactivateAccount);
 
 module.exports = router;
