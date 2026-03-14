@@ -1,15 +1,76 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
-import { Plus, AlertTriangle, PackageX, Download, Printer, MoreVertical, Package } from 'lucide-react';
+import { Plus, AlertTriangle, PackageX, Download, Printer, MoreVertical, Package, ChevronDown, Filter } from 'lucide-react';
 import { createColumnHelper } from '@tanstack/react-table';
 import AppLayout from '@/components/layout/AppLayout';
 import PageHeader from '@/components/shared/PageHeader';
 import DataTable from '@/components/shared/DataTable';
-import SearchInput from '@/components/shared/SearchInput';
 import api from '@/lib/axios';
 import Link from 'next/link';
+
+// Custom dropdown pill filter button
+function DropdownFilter({ label, value, options, onChange, placeholder }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const selected = options.find((o) => o.value === value);
+  const displayLabel = selected ? `${label}: ${selected.label}` : `${label}: All`;
+
+  useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+        style={{
+          backgroundColor: '#f8fafc',
+          border: '1px solid #e2e8f0',
+          color: '#334155',
+        }}
+        onMouseOver={(e) => { e.currentTarget.style.borderColor = '#f07c28'; }}
+        onMouseOut={(e) => { if (!open) e.currentTarget.style.borderColor = '#e2e8f0'; }}
+      >
+        {displayLabel}
+        <ChevronDown size={14} style={{ color: '#94a3b8' }} />
+      </button>
+      {open && (
+        <div
+          className="absolute left-0 mt-1 w-48 rounded-xl shadow-lg z-50 py-1 overflow-hidden"
+          style={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0' }}
+        >
+          <button
+            onClick={() => { onChange(''); setOpen(false); }}
+            className="w-full text-left px-4 py-2 text-sm transition-colors"
+            style={{ color: !value ? '#f07c28' : '#334155', fontWeight: !value ? 600 : 400 }}
+            onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; }}
+            onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+          >
+            All
+          </button>
+          {options.map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => { onChange(opt.value); setOpen(false); }}
+              className="w-full text-left px-4 py-2 text-sm transition-colors"
+              style={{ color: value === opt.value ? '#f07c28' : '#334155', fontWeight: value === opt.value ? 600 : 400 }}
+              onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; }}
+              onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 const columnHelper = createColumnHelper();
 
@@ -53,7 +114,7 @@ export default function ProductsPage() {
   const [categories, setCategories] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({ search: '', categoryId: '', page: 1 });
+  const [filters, setFilters] = useState({ search: '', categoryId: '', statusFilter: '', page: 1 });
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -186,36 +247,34 @@ export default function ProductsPage() {
 
       {/* Filters Bar */}
       <div
-        className="bg-white rounded-xl p-4 flex flex-wrap items-center gap-4 mb-6"
+        className="bg-white rounded-xl p-4 flex flex-wrap items-center gap-3 mb-6"
         style={{ border: '1px solid #e2e8f0' }}
       >
         <span className="text-xs font-bold uppercase tracking-wider ml-1" style={{ color: '#94a3b8' }}>
           Filters:
         </span>
 
-        {/* Search */}
-        <SearchInput
-          value={filters.search}
-          onChange={(v) => setFilters((f) => ({ ...f, search: v, page: 1 }))}
-          placeholder="Search SKU, name, or category..."
+        {/* Category dropdown pill */}
+        <DropdownFilter
+          label="Category"
+          value={filters.categoryId}
+          options={categories.map((c) => ({ value: c.id, label: c.name }))}
+          onChange={(v) => setFilters((f) => ({ ...f, categoryId: v, page: 1 }))}
         />
 
-        {/* Category dropdown */}
-        <select
-          value={filters.categoryId}
-          onChange={(e) => setFilters((f) => ({ ...f, categoryId: e.target.value, page: 1 }))}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium focus:outline-none transition-colors cursor-pointer"
-          style={{
-            backgroundColor: '#f8fafc',
-            border: '1px solid #e2e8f0',
-            color: '#334155',
-          }}
+        {/* Status filter pill */}
+        <button
+          type="button"
+          onClick={() => setFilters((f) => ({ ...f, statusFilter: f.statusFilter === 'low' ? '' : 'low', page: 1 }))}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all"
+          style={filters.statusFilter === 'low'
+            ? { backgroundColor: '#fee2e2', border: '1px solid #fecaca', color: '#dc2626' }
+            : { backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', color: '#334155' }
+          }
         >
-          <option value="">Category: All</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>{c.name}</option>
-          ))}
-        </select>
+          {filters.statusFilter === 'low' ? 'Status: Low Stock' : 'Status: All'}
+          <Filter size={13} style={{ color: filters.statusFilter === 'low' ? '#dc2626' : '#94a3b8' }} />
+        </button>
 
         {/* Export + Print */}
         <div className="ml-auto flex items-center gap-2">
