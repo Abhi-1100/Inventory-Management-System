@@ -6,7 +6,9 @@ import {
   Package,
   PackageOpen,
   Truck,
-  BarChart2,
+  ArrowLeftRight,
+  ClipboardList,
+  History,
   Settings,
   Boxes,
 } from 'lucide-react';
@@ -14,10 +16,12 @@ import { useAuthStore } from '@/store/authStore';
 
 const navItems = [
   { label: 'Dashboard',    href: '/dashboard',               icon: LayoutDashboard },
-  { label: 'Inventory',    href: '/products',                icon: Package },
-  { label: 'Orders',       href: '/operations/receipts',     icon: PackageOpen },
+  { label: 'Products',     href: '/products',                icon: Package },
+  { label: 'Receipts',     href: '/operations/receipts',     icon: PackageOpen },
   { label: 'Deliveries',   href: '/operations/deliveries',   icon: Truck },
-  { label: 'Reports',      href: '/move-history',            icon: BarChart2 },
+  { label: 'Transfers',    href: '/operations/transfers',    icon: ArrowLeftRight },
+  { label: 'Adjustments',  href: '/operations/adjustments',  icon: ClipboardList },
+  { label: 'Move History', href: '/move-history',            icon: History },
   { label: 'Settings',     href: '/settings/warehouses',     icon: Settings },
 ];
 
