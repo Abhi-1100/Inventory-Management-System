@@ -11,6 +11,7 @@ router.post('/categories', ctrl.createCategory);
 router.delete('/categories/:id', ctrl.deleteCategory);
 router.get('/reorder-rules', ctrl.listReorderRules);
 router.post('/reorder-rules', ctrl.upsertReorderRule);
+router.get('/alerts/low-stock', ctrl.getLowStockAlerts);
 router.get('/:id', ctrl.getProduct);
 router.put('/:id', ctrl.updateProduct);
 router.delete('/:id', ctrl.deleteProduct);

@@ -159,3 +159,87 @@ exports.upsertReorderRule = async (req, res) => {
   });
   res.json(rule);
 };
+
+// GET /api/products/alerts/low-stock  [JWT required]
+exports.getLowStockAlerts = async (req, res) => {
+  const allStock = await prisma.stock.findMany({
+    include: {
+      product: { include: { category: true } },
+      location: { include: { warehouse: true } },
+    },
+  });
+
+  const reorderRules = await prisma.reorderRule.findMany();
+
+  const alerts = [];
+
+  for (const s of allStock) {
+    const rule = reorderRules.find(
+      (r) => r.productId === s.productId && r.locationId === s.locationId
+    );
+
+    if (!rule) continue;
+
+    const qty = Number(s.quantityOnHand);
+    const min = Number(rule.minQty);
+    const max = Number(rule.maxQty);
+
+    if (qty === 0) {
+      alerts.push({
+        type: 'OUT_OF_STOCK',
+        severity: 'critical',
+        product: {
+          id: s.product.id,
+          name: s.product.name,
+          sku: s.product.sku,
+          unitOfMeasure: s.product.unitOfMeasure,
+          category: s.product.category.name,
+        },
+        location: {
+          id: s.location.id,
+          name: s.location.name,
+          warehouse: s.location.warehouse.name,
+        },
+        quantityOnHand: qty,
+        reorderMin: min,
+        reorderMax: max,
+        message: `${s.product.name} is OUT OF STOCK at ${s.location.name}`,
+      });
+    } else if (qty <= min) {
+      alerts.push({
+        type: 'LOW_STOCK',
+        severity: 'warning',
+        product: {
+          id: s.product.id,
+          name: s.product.name,
+          sku: s.product.sku,
+          unitOfMeasure: s.product.unitOfMeasure,
+          category: s.product.category.name,
+        },
+        location: {
+          id: s.location.id,
+          name: s.location.name,
+          warehouse: s.location.warehouse.name,
+        },
+        quantityOnHand: qty,
+        reorderMin: min,
+        reorderMax: max,
+        message: `${s.product.name} is LOW at ${s.location.name} — only ${qty} left (min: ${min})`,
+      });
+    }
+  }
+
+  // Sort: critical first, then warning
+  alerts.sort((a, b) => {
+    if (a.severity === 'critical' && b.severity !== 'critical') return -1;
+    if (b.severity === 'critical' && a.severity !== 'critical') return 1;
+    return 0;
+  });
+
+  res.json({
+    total: alerts.length,
+    critical: alerts.filter((a) => a.severity === 'critical').length,
+    warning: alerts.filter((a) => a.severity === 'warning').length,
+    alerts,
+  });
+};

@@ -1,0 +1,5 @@
+/* Landing page body override */
+body:has(.landing-page) {
+  background-color: #ffffff !important;
+  color: #393939;
+}
