@@ -57,7 +57,7 @@ export default function WarehousesPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <PageHeader
         title="Warehouses"
         subtitle={`${warehouses.length} warehouse${warehouses.length !== 1 ? 's' : ''}`}

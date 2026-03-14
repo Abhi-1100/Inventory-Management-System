@@ -225,7 +225,7 @@ export default function ProductsPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
 
       {/* Page Header */}
       <PageHeader

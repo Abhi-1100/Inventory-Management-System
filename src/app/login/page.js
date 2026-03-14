@@ -59,7 +59,7 @@ export default function LoginPage() {
       className="min-h-screen flex items-center justify-center p-6"
       style={{ background: 'linear-gradient(135deg, #e8e8e8 0%, #f0f0f0 100%)' }}
     >
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
 
       {/* Main card */}
       <div

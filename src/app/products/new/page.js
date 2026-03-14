@@ -65,7 +65,7 @@ export default function NewProductPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
 
       {/* Breadcrumbs */}
       <div className="flex items-center gap-2 mb-4">

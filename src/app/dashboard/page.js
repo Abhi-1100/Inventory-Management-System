@@ -107,7 +107,7 @@ export default function DashboardPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
 
       <div className="space-y-8">
 

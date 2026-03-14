@@ -38,7 +38,7 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans text-slate-900 bg-[#f6f6f8]">
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
 
       {/* ── Navigation ─────────────────────────────────────────── */}
       <nav className="w-full px-6 py-4 flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200">

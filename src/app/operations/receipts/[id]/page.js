@@ -133,7 +133,7 @@ export default function ReceiptDetailPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <ConfirmModal isOpen={cancelModal} title="Cancel Receipt" message="Are you sure you want to cancel this receipt?" onConfirm={handleCancel} onCancel={() => setCancelModal(false)} confirmLabel="Cancel Receipt" danger />
 
       {/* Breadcrumb */}

@@ -58,7 +58,7 @@ export default function LocationsPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <PageHeader title="Locations" subtitle={`${locations.length} locations`} action={<button onClick={openCreate} className="flex items-center gap-2 bg-accent hover:bg-accent-hover text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"><Plus size={16} /> Add Location</button>} />
 
       {showForm && (

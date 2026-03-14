@@ -69,7 +69,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4" style={{ backgroundColor: '#F3F4F6' }}>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       
       {/* Branding Header */}
       <header className="mb-8 text-center">

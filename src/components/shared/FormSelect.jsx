@@ -32,7 +32,7 @@ export default function FormSelect({
           </option>
         ))}
       </select>
-      {error && <p className="text-xs text-danger">{error}</p>}
+      {error && <p className="text-xs text-danger text-right mt-0.5">{error}</p>}
     </div>
   );
 }

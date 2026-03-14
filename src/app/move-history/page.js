@@ -181,7 +181,7 @@ export default function MoveHistoryPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <PageHeader title="Move History" subtitle={`${total} movement records`} />
 
       {/* Filter bar — same pill design as Products page */}

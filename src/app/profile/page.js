@@ -61,7 +61,7 @@ export default function ProfilePage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <PageHeader title="My Profile" subtitle="Manage your account settings" />
 
       <div className="max-w-lg space-y-5">
