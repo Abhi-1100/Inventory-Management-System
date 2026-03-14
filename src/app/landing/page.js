@@ -19,7 +19,7 @@ export default function LandingPage() {
               </svg>
             </div>
             <span className="text-2xl font-extrabold tracking-tight text-[#393939]">
-              StockFlow <span className="text-[#A4B6C2]">IMS</span>
+              Core<span className="text-[#A4B6C2]">Inventory</span>
             </span>
           </div>
 
@@ -45,10 +45,22 @@ export default function LandingPage() {
 
       <main>
         {/* ── Hero ── */}
-        <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-          {/* dim background image */}
+        <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-white">
+          {/* Dimmed background image — exactly like reference design (~8% opacity) */}
           <div className="absolute inset-0 z-0">
-            <div className="w-full h-full bg-gradient-to-br from-orange-50 via-white to-slate-50 opacity-70" />
+            <img
+              src="/hero-bg.png"
+              alt=""
+              aria-hidden="true"
+              className="w-full h-full object-cover"
+              style={{ opacity: 0.08 }}
+            />
+            {/* Soft white vignette so edges fade cleanly */}
+            <div className="absolute inset-0"
+              style={{
+                background: 'radial-gradient(ellipse at center, rgba(255,255,255,0) 40%, rgba(255,255,255,0.85) 100%)'
+              }}
+            />
           </div>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
@@ -199,7 +211,7 @@ export default function LandingPage() {
                 <h3 className="text-3xl font-bold mb-6">Precision Product Management</h3>
                 <p className="text-[#A4B6C2] text-lg leading-relaxed mb-6">
                   Organize your entire catalog with custom attributes, category hierarchies, and rich media.
-                  StockFlow IMS handles millions of SKUs with ease, ensuring data integrity across every touchpoint.
+                  CoreInventory handles millions of SKUs with ease, ensuring data integrity across every touchpoint.
                 </p>
                 <ul className="space-y-3">
                   {['Global Batch Tracking', 'Serialized Inventory', 'Barcode & RFID Ready'].map(item => (
@@ -345,7 +357,7 @@ export default function LandingPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <h2 className="text-4xl md:text-5xl font-black mb-8">Ready to optimize your inventory?</h2>
             <p className="text-[#A4B6C2] text-xl mb-12 max-w-2xl mx-auto">
-              Join 500+ global enterprises using StockFlow IMS to power their supply chain.
+              Join 500+ global enterprises using CoreInventory to power their supply chain.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link href="/login"
@@ -374,7 +386,7 @@ export default function LandingPage() {
                       strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
                   </svg>
                 </div>
-                <span className="text-xl font-bold tracking-tight text-[#393939]">StockFlow IMS</span>
+                <span className="text-xl font-bold tracking-tight text-[#393939]">CoreInventory</span>
               </div>
               <p className="text-[#A4B6C2] text-sm leading-relaxed">
                 Leading-edge inventory management for modern enterprises. Built for speed, scale, and accuracy.
@@ -413,7 +425,7 @@ export default function LandingPage() {
           </div>
 
           <div className="pt-8 border-t border-[#A4B6C2]/10 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-[#A4B6C2] text-xs">© 2026 StockFlow Systems International. All rights reserved.</p>
+            <p className="text-[#A4B6C2] text-xs">© 2026 CoreInventory. All rights reserved.</p>
             <div className="flex gap-6">
               <a className="text-[#A4B6C2] hover:text-accent transition-colors" href="#">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

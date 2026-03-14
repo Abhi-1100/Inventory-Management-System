@@ -84,7 +84,7 @@ export default function Navbar() {
             <div className="text-right hidden sm:block">
               <p className="text-sm font-bold truncate transition-colors" style={{ color: '#393939' }}>{displayName}</p>
               <p className="text-[10px] uppercase tracking-wider font-bold truncate" style={{ color: '#A4B6C2' }}>
-                ADMIN ID: {user?.id ? `SF-${user.id}` : 'SF-DEMO'}
+                ADMIN ID: {user?.id ? `CI-${user.id}` : 'CI-DEMO'}
               </p>
             </div>
             <div

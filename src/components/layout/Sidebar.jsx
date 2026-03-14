@@ -40,7 +40,7 @@ export default function Sidebar() {
           style={{ backgroundColor: '#F27D21' }}>
           <Boxes size={18} className="text-white" />
         </div>
-        <h1 className="font-extrabold text-lg tracking-tight" style={{ color: '#1a1a1a' }}>STOCKFLOW</h1>
+        <h1 className="font-extrabold text-lg tracking-tight" style={{ color: '#1a1a1a' }}>CoreInventory</h1>
       </div>
 
       {/* Nav */}
