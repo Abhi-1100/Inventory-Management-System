@@ -84,7 +84,7 @@ export default function TransferDetailPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <ConfirmModal isOpen={cancelModal} title="Cancel Transfer" message="Cancel this transfer?" onConfirm={handleCancel} onCancel={() => setCancelModal(false)} confirmLabel="Cancel Transfer" danger />
       <div className="mb-6">
         <Link href="/operations/transfers" className="flex items-center gap-1.5 text-sm text-text-muted hover:text-text-secondary mb-2 transition-colors"><ArrowLeft size={14} /> Transfers</Link>

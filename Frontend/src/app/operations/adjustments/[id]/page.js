@@ -55,7 +55,7 @@ export default function AdjustmentDetailPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <ConfirmModal isOpen={cancelModal} title="Cancel Adjustment" message="Cancel this inventory adjustment?" onConfirm={handleCancel} onCancel={() => setCancelModal(false)} confirmLabel="Cancel" danger />
 
       <div className="mb-6">

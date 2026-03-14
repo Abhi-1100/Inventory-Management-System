@@ -51,7 +51,7 @@ export default function DeliveriesPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <PageHeader
         title="Deliveries"
         subtitle={`${total} delivery(s)`}

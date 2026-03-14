@@ -64,7 +64,7 @@ export default function NewAdjustmentPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <div className="mb-6">
         <Link href="/operations/adjustments" className="flex items-center gap-1.5 text-sm text-text-muted hover:text-text-secondary mb-2 transition-colors"><ArrowLeft size={14} /> Adjustments</Link>
         <h1 className="text-2xl font-bold text-text-primary">New Adjustment</h1>

@@ -79,7 +79,7 @@ export default function ProductDetailPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <ConfirmModal
         isOpen={showDelete}
         title="Delete Product"

@@ -51,7 +51,7 @@ export default function ReceiptsPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <PageHeader
         title="Receipts"
         subtitle={`${total} receipt${total !== 1 ? 's' : ''}`}

@@ -63,7 +63,7 @@ export default function ReorderRulesPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <PageHeader
         title="Reorder Rules"
         subtitle="Automatic replenishment thresholds"

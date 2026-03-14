@@ -57,7 +57,7 @@ export default function CategoriesPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <ConfirmModal
         isOpen={deleteModal.open}
         title="Delete Category"

@@ -27,7 +27,7 @@ export default function FormInput({
         {...(register ? register(id) : {})}
         {...rest}
       />
-      {error && <p className="text-xs text-danger">{error}</p>}
+      {error && <p className="text-xs text-danger text-right mt-0.5">{error}</p>}
     </div>
   );
 }

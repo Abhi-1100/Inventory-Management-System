@@ -51,7 +51,7 @@ export default function TransfersPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <PageHeader
         title="Transfers"
         subtitle={`${total} transfer(s)`}

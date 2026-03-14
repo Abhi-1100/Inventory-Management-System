@@ -48,7 +48,7 @@ export default function AdjustmentsPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <PageHeader
         title="Adjustments"
         subtitle={`${total} adjustment(s)`}

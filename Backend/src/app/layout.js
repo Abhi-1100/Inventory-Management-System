@@ -2,7 +2,7 @@ import './globals.css';
 
 export const metadata = {
   title: 'CoreInventory',
-  description: 'Modern Inventory Management System',
+  description: 'CoreInventory - Modern Inventory Management System',
 };
 
 export default function RootLayout({ children }) {

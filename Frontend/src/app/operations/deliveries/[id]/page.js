@@ -97,7 +97,7 @@ export default function DeliveryDetailPage() {
 
   return (
     <AppLayout>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <ConfirmModal isOpen={cancelModal} title="Cancel Delivery" message="Are you sure you want to cancel this delivery?" onConfirm={handleCancel} onCancel={() => setCancelModal(false)} confirmLabel="Cancel Delivery" danger />
       <div className="mb-6">
         <Link href="/operations/deliveries" className="flex items-center gap-1.5 text-sm text-text-muted hover:text-text-secondary mb-2 transition-colors"><ArrowLeft size={14} /> Deliveries</Link>
