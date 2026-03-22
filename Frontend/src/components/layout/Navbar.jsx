@@ -1,20 +1,22 @@
 'use client';
+
+import { Bell, Search, Settings, HelpCircle, User, LogOut } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Bell, Search, User, Settings, LogOut } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
-  const { user, clearAuth } = useAuthStore();
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileRef = useRef(null);
   const router = useRouter();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  
+  const { user, clearAuth } = useAuthStore();
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpen(false);
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -22,113 +24,92 @@ export default function Navbar() {
   }, []);
 
   const handleLogout = () => {
-    setDropdownOpen(false);
     clearAuth();
     router.push('/login');
   };
 
   const displayName = user?.name || 'User';
-  const roleName = user?.role === 'admin' ? 'SYSTEM ADMINISTRATOR' : 'STAFF MEMBER';
 
   return (
-    <header
-      className="h-16 flex-shrink-0 flex items-center justify-between px-8 sticky top-0 z-10"
-      style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #e2e8f0' }}
-    >
-      {/* Search */}
-      <div className="relative w-96">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#94a3b8' }} />
-        <input
-          type="text"
-          placeholder="Search inventory, orders..."
-          className="w-full rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 transition-colors"
-          style={{
-            backgroundColor: '#f8fafc',
-            border: '1px solid #e2e8f0',
-            color: '#0f172a',
-          }}
-          onFocus={(e) => { e.target.style.borderColor = '#f07c28'; e.target.style.boxShadow = '0 0 0 3px rgba(240,124,40,0.1)'; }}
-          onBlur={(e) => { e.target.style.borderColor = '#e2e8f0'; e.target.style.boxShadow = 'none'; }}
-        />
+    <nav className="h-16 bg-surface border-b border-border/10 flex items-center justify-between px-8 sticky top-0 z-30 shadow-sm backdrop-blur-md bg-opacity-90">
+      <div className="flex items-center gap-6 flex-1">
+        <div className="relative w-96 group">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted w-4 h-4 group-focus-within:text-accent transition-colors" />
+          <input 
+            type="text" 
+            placeholder="Search inventory, orders, or reports... (Cmd+K)" 
+            className="w-full pl-10 pr-4 py-2 bg-bg border border-border/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all placeholder:text-text-muted/50"
+          />
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+            <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-medium text-text-muted bg-surface border border-border/20 rounded">⌘</kbd>
+            <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-medium text-text-muted bg-surface border border-border/20 rounded">K</kbd>
+          </div>
+        </div>
       </div>
 
-      {/* Right side */}
       <div className="flex items-center gap-4">
-        {/* Notification bell */}
-        <button
-          className="relative p-2 rounded-lg transition-colors"
-          style={{ color: '#64748b' }}
-          onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#f1f5f9'; }}
-          onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
-        >
-          <Bell size={20} />
-          {/* Orange dot */}
-          <span
-            className="absolute top-2 right-2 w-2 h-2 rounded-full ring-2 ring-white"
-            style={{ backgroundColor: '#f07c28' }}
-          />
-        </button>
+        <div className="flex items-center gap-2 pr-4 border-r border-border/10">
+          <button className="p-2 text-text-muted hover:text-accent hover:bg-accent/5 rounded-lg transition-all relative group">
+            <Bell className="w-5 h-5" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-surface"></span>
+          </button>
+          
+          <button className="p-2 text-text-muted hover:text-accent hover:bg-accent/5 rounded-lg transition-all">
+            <HelpCircle className="w-5 h-5" />
+          </button>
+          
+          <Link href="/settings" className="p-2 text-text-muted hover:text-accent hover:bg-accent/5 rounded-lg transition-all">
+            <Settings className="w-5 h-5" />
+          </Link>
+        </div>
 
-        {/* Divider */}
-        <div className="h-8 w-px" style={{ backgroundColor: '#e2e8f0' }} />
-
-        {/* User profile dropdown */}
-        <div className="relative" ref={dropdownRef}>
+        <div className="relative" ref={profileRef}>
           <button 
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-3 p-1.5 pr-2 rounded-lg transition-colors focus:outline-none"
-            style={{ backgroundColor: dropdownOpen ? '#f8fafc' : 'transparent' }}
-            onMouseOver={(e) => { if(!dropdownOpen) e.currentTarget.style.backgroundColor = '#f8fafc'; }}
-            onMouseOut={(e) => { if(!dropdownOpen) e.currentTarget.style.backgroundColor = 'transparent'; }}
+            onClick={() => setIsProfileOpen(!isProfileOpen)}
+            className="flex items-center gap-3 hover:bg-bg p-1.5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-accent/20"
           >
-            <div className="text-right hidden sm:block">
-              <p className="text-sm font-bold truncate transition-colors" style={{ color: '#393939' }}>{displayName}</p>
-              <p className="text-[10px] uppercase tracking-wider font-bold truncate" style={{ color: '#A4B6C2' }}>
-                {user?.role === 'manager' ? 'MANAGER' : roleName}
-              </p>
+            <div className="text-right hidden md:block">
+              <p className="text-sm font-semibold text-text-primary leading-none">{displayName}</p>
+              <p className="text-xs text-text-muted mt-1">{user?.email || 'user@example.com'}</p>
             </div>
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border-2 overflow-hidden"
-              style={{ backgroundColor: '#F2C18D', borderColor: '#F2C18D' }}
-            >
-              <span className="text-xl font-bold text-white">
-                {displayName.charAt(0).toUpperCase()}
+            
+            <div className="w-9 h-9 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent overflow-hidden shadow-inner">
+              <span className="font-bold text-sm tracking-wider">
+                {displayName.substring(0, 2).toUpperCase()}
               </span>
             </div>
           </button>
 
-          {/* Dropdown Menu */}
-          {dropdownOpen && (
-            <div 
-              className="absolute right-0 mt-2 w-56 rounded-xl shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1)] bg-white ring-1 ring-black ring-opacity-5 overflow-hidden origin-top-right z-50 transition-all"
-              style={{ border: '1px solid #e2e8f0' }}
-            >
-              <div className="p-3 border-b border-gray-100 sm:hidden">
-                <p className="text-sm font-bold text-gray-900 truncate">{displayName}</p>
-                <p className="text-[10px] text-gray-500 uppercase font-bold tracking-wider truncate mt-0.5">{roleName}</p>
+          {isProfileOpen && (
+            <div className="absolute right-0 mt-2 w-56 bg-surface rounded-xl shadow-lg border border-border/10 py-2 animate-fade-in-up origin-top-right">
+              <div className="px-4 py-2 border-b border-border/10 md:hidden">
+                <p className="text-sm font-semibold text-text-primary truncate">{displayName}</p>
+                <p className="text-xs text-text-muted truncate">{user?.email || 'user@example.com'}</p>
               </div>
-              <div className="p-2 space-y-1">
-                <Link 
-                  href="/profile"
-                  onClick={() => setDropdownOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors font-medium"
-                >
-                  <User size={16} className="text-gray-400" />
-                  View Profile
-                </Link>
-                <div className="h-px bg-gray-100 my-1 mx-2" />
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-3 px-3 py-2 text-sm text-red-600 rounded-lg hover:bg-red-50 w-full text-left transition-colors font-medium"
-                >
-                  <LogOut size={16} className="text-red-400" />
-                  Logout
-                </button>
-              </div>
+              
+              <Link 
+                href="/profile" 
+                className="flex items-center gap-2 px-4 py-2 text-sm text-text-primary hover:bg-bg transition-colors"
+                onClick={() => setIsProfileOpen(false)}
+              >
+                <User className="w-4 h-4" />
+                <span>My Profile</span>
+              </Link>
+              
+              <button 
+                onClick={() => {
+                  setIsProfileOpen(false);
+                  handleLogout();
+                }}
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-500/5 transition-colors text-left"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Log out</span>
+              </button>
             </div>
           )}
         </div>
       </div>
-    </header>
+    </nav>
   );
 }

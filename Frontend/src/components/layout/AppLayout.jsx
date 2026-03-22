@@ -1,49 +1,76 @@
 'use client';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+
+import { useState, useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import Sidebar from '@/components/layout/Sidebar';
+import Navbar from '@/components/layout/Navbar';
 import { useAuthStore } from '@/store/authStore';
-import Sidebar from './Sidebar';
-import Navbar from './Navbar';
-import LoadingSpinner from '../shared/LoadingSpinner';
 import api from '@/lib/axios';
 
+const publicRoutes = ['/login', '/signup', '/landing', '/forgot-password'];
+
 export default function AppLayout({ children }) {
-  const { token, user, setAuth, clearAuth } = useAuthStore();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
+  
+  const { setAuth, clearAuth, token } = useAuthStore();
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
 
   useEffect(() => {
-    // If we have a token but no user object yet, validate with backend
-    const storedToken = token || (typeof window !== 'undefined' ? localStorage.getItem('ci_token') : null);
+    const initAuth = async () => {
+      const storedToken = localStorage.getItem('ci_token') || token;
+      
+      if (!storedToken) {
+        if (!publicRoutes.includes(pathname)) {
+          router.push('/login');
+        } else {
+          setIsAuthChecking(false);
+        }
+        return;
+      }
 
-    if (!storedToken) {
-      router.replace('/login');
-      return;
-    }
+      try {
+        const res = await api.get('/auth/me', { headers: { Authorization: `Bearer ${storedToken}` } });
+        setAuth(res.data.data, storedToken);
+        setIsAuthChecking(false);
+      } catch (err) {
+        clearAuth();
+        if (!publicRoutes.includes(pathname)) {
+          router.push('/login');
+        } else {
+          setIsAuthChecking(false);
+        }
+      }
+    };
 
-    if (!user) {
-      api.get('/auth/me')
-        .then((res) => {
-          setAuth(res.data, storedToken);
-        })
-        .catch(() => {
-          clearAuth();
-          router.replace('/login');
-        });
-    }
-  }, [token, user, setAuth, clearAuth, router]);
+    initAuth();
+  }, [pathname, router, setAuth, clearAuth, token]);
 
-  if (!user) {
-    return <LoadingSpinner fullPage />;
+  if (isAuthChecking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-bg">
+        <div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  // If on a public route, just render the page (no sidebar/navbar)
+  if (publicRoutes.includes(pathname)) {
+    return <main className="min-h-screen bg-bg">{children}</main>;
   }
 
   return (
-    <div className="flex min-h-screen" style={{ backgroundColor: '#fdf8f4' }}>
-      <Sidebar />
-      {/* Offset for fixed sidebar */}
-      <div className="flex flex-col flex-1 ml-64 min-h-screen">
+    <div className="min-h-screen flex bg-bg">
+      <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+      
+      <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-20'}`}>
         <Navbar />
-        <main className="flex-1 overflow-y-auto p-8">
-          {children}
+        
+        <main className="flex-1 p-8 overflow-y-auto">
+          <div className="max-w-7xl mx-auto space-y-6 animate-fade-in-up">
+            {children}
+          </div>
         </main>
       </div>
     </div>
