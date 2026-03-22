@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import './landing.css';
+import Logo from '@/components/shared/Logo';
 
 export default function LandingPage() {
   return (
@@ -12,12 +13,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center text-white shadow-lg">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                  strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-              </svg>
-            </div>
+            <Logo size={40} className="drop-shadow-lg" />
             <span className="text-2xl font-extrabold tracking-tight text-[#393939]">
               Core<span className="text-[#A4B6C2]">Inventory</span>
             </span>
@@ -28,8 +24,10 @@ export default function LandingPage() {
             <a className="hover:text-accent transition-colors" href="#features">Features</a>
             <a className="hover:text-accent transition-colors" href="#showcase">Platform</a>
             <a className="hover:text-accent transition-colors" href="#pricing">Pricing</a>
-            <Link href="/login"
-              className="px-5 py-2.5 bg-accent text-white rounded-lg hover:bg-accent-hover transition-all shadow-md font-semibold">
+            <Link
+              href="/login"
+              className="px-5 py-2.5 bg-accent text-white rounded-lg hover:bg-accent-hover transition-all shadow-md font-semibold"
+            >
               Get Started
             </Link>
           </nav>
@@ -79,8 +77,10 @@ export default function LandingPage() {
 
             <div className="flex flex-col sm:flex-row justify-center gap-4"
               style={{ animation: 'fadeInUp 0.8s ease-out 0.3s forwards', opacity: 0 }}>
-              <Link href="/login"
-                className="px-8 py-4 bg-accent text-white text-lg font-bold rounded-lg hover:scale-105 transition-transform shadow-xl shadow-accent/20">
+              <Link
+                href="/login"
+                className="px-8 py-4 bg-accent text-white text-lg font-bold rounded-lg hover:scale-105 transition-transform shadow-xl shadow-accent/20 inline-block"
+              >
                 Get Started Free
               </Link>
               <a href="#showcase"
@@ -299,8 +299,10 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/login"
-                  className="w-full py-3 border border-[#393939] text-center font-bold rounded-lg hover:bg-[#393939] hover:text-white transition-colors block">
+                <Link
+                  href="/login"
+                  className="w-full py-3 border border-[#393939] text-center font-bold rounded-lg hover:bg-[#393939] hover:text-white transition-colors block"
+                >
                   Start Basic
                 </Link>
               </div>
@@ -319,8 +321,10 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/login"
-                  className="w-full py-3 bg-accent text-white text-center font-bold rounded-lg hover:bg-accent-hover transition-colors shadow-lg block">
+                <Link
+                  href="/login"
+                  className="w-full py-3 bg-accent text-white text-center font-bold rounded-lg hover:bg-accent-hover transition-colors shadow-lg block"
+                >
                   Go Pro Now
                 </Link>
               </div>
@@ -336,8 +340,10 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/login"
-                  className="w-full py-3 border border-[#393939] text-center font-bold rounded-lg hover:bg-[#393939] hover:text-white transition-colors block">
+                <Link
+                  href="/login"
+                  className="w-full py-3 border border-[#393939] text-center font-bold rounded-lg hover:bg-[#393939] hover:text-white transition-colors block"
+                >
                   Contact Sales
                 </Link>
               </div>
@@ -360,8 +366,10 @@ export default function LandingPage() {
               Join 500+ global enterprises using CoreInventory to power their supply chain.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link href="/login"
-                className="px-10 py-5 bg-accent text-white text-xl font-bold rounded-lg hover:bg-accent-hover transition-all">
+              <Link
+                href="/login"
+                className="px-10 py-5 bg-accent text-white text-xl font-bold rounded-lg hover:bg-accent-hover transition-all inline-block"
+              >
                 Start Your Free Trial
               </Link>
               <a href="#features"
@@ -380,12 +388,7 @@ export default function LandingPage() {
             {/* Brand */}
             <div className="col-span-1">
               <div className="flex items-center gap-2 mb-6">
-                <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center text-white">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                      strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                  </svg>
-                </div>
+                <Logo size={32} />
                 <span className="text-xl font-bold tracking-tight text-[#393939]">CoreInventory</span>
               </div>
               <p className="text-[#A4B6C2] text-sm leading-relaxed">

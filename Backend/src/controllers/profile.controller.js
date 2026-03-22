@@ -7,7 +7,7 @@ exports.getProfile = async (req, res) => {
     where: { id: req.user.id },
     select: {
       id: true, name: true, email: true, role: true,
-      phone: true, title: true, preferences: true, lastLogin: true, isActive: true
+      phone: true, title: true, preferences: true, lastLogin: true, isActive: true, avatar: true
     },
   });
 
@@ -19,13 +19,13 @@ exports.getProfile = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-  const { name, email, phone, title, preferences } = req.body;
+  const { name, email, phone, title, preferences, avatar } = req.body;
   const user = await prisma.user.update({
     where: { id: req.user.id },
-    data: { name, email, phone, title, preferences },
+    data: { name, email, phone, title, preferences, avatar },
     select: {
       id: true, name: true, email: true, role: true,
-      phone: true, title: true, preferences: true, lastLogin: true, isActive: true
+      phone: true, title: true, preferences: true, lastLogin: true, isActive: true, avatar: true
     },
   });
   res.json({ ...user, role: user.role.toLowerCase() });

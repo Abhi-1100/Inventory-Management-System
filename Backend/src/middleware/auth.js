@@ -1,12 +1,13 @@
 const jwt = require('jsonwebtoken');
 
-const authenticate = (req, res, next) => {
+const authenticate = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     console.error('Auth blocked: Missing or invalid header ->', authHeader);
     return res.status(401).json({ error: 'No token provided', code: 'UNAUTHORIZED' });
   }
   const token = authHeader.split(' ')[1];
+
   try {
     if (!process.env.JWT_SECRET) {
       console.error('CRITICAL: JWT_SECRET is not defined in environment!');

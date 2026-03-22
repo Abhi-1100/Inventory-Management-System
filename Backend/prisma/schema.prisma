@@ -13,6 +13,12 @@ model User {
   email        String     @unique
   passwordHash String     @map("password_hash")
   role         Role       @default(STAFF)
+  phone        String?
+  title        String?
+  preferences  Json?
+  lastLogin    DateTime?  @map("last_login")
+  isActive     Boolean    @default(true) @map("is_active")
+  avatar       String?    @db.Text
   createdAt    DateTime   @default(now()) @map("created_at")
   otpTokens    OtpToken[]
   operations   Operation[]
